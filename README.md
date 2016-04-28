@@ -48,14 +48,42 @@ satisfaction of inhabitants.
 
 Data and Methodology
 --------------------
-The satisfaction of inhabitants is inferred from surveys and the features are
-inferred from census data, notably from <a href="http://datasf.org">datasf.org</a>.
+### Survey Data
+
+We used the survey data set - [San Francisco City Survey Data 1996-2015](https://data.sfgov.org/City-Management-and-Ethics/San-Francisco-City-Survey-Data-1996-2015/89tc-4uwi) for computing the satisfaction index of San Francisco city inhabitants as follows - 
+* Each field in the survey data set represents a numerical categorical response to a survey question (except for a few columns related to survey and demographic information like year, zipcode, district etc)
+* Only the questions with graded responses (from F-Very Bad to A-Excellent) were considered
+* Responses that had values of 6 (Have Not Used) and 7 (Don't know) were ignored
+* All the responses were weighted by the 'finweigh' column as stipulated in the survey data notes
+* Only data from 2009-2015 was considered
+* Finally all the responses were aggregated across zipcodes and a final **Satisfaction Score** was computed by taking a weighted average of all the scores across categories
+
+### Neighborhood Features
 
 The neighborhood features include:
 - a <b>crime</b> index, calculated from the crime density of the area.
 - access to <b>schools</b>, both public and private.
 - access to <b>restauration</b> services, i.e. number of close restaurants and their respective ratings.
 - <b>transportation costs</b>, <b>affordability</b>, <b>poverty</b>, <b>ethnicity</b> indices taken directly from census data.
+
+The crime, schools and restauration indices were created in the following way:
+* The index for every tract is a weighted average (by distance) of the tract to the individual instances (school, restaurant or crime): *I(t) ~ &#931; K(d(t, x_i))* where the *x_i* are the coordinates of the instances, *t* the coordinates of the tract, *d* a distance function and *K* a smoothing kernel.
+* The indices are then normalized to be between 0 and 100.
+
+### Feature Importances:
+
+* We select a list of features like, Job Prospects, Crime Index, Environment Score, Housing and Transportation prices etc., which can be affected by the government. 
+
+* We aim to find the features which are most important for predicting the satisfaction scores across San Francisco. We do this by using `Random Forests`.
+
+* Random Forests fit a bunch of trees to bootstrapped versions of the sample data and a better fit is obtained by making  successive trees independent of each other. This is done by randomly selecting a subset of features at each node of the tree.
+
+* To compute the `Feature Importances`, the reduction of the error due to each of the features is calculated and the importance of each feature is inferred.
+
+### Conclusions:
+* We have compiled data from various sources to understand what drives the well-being of residents in San Francisco. We observed that Housing Costs and Job Prospects are the most important predictors of well-being.
+
+* We also observed that there are certain neighborhoods which perform badly across various types of amenities. But, we also observe that all kinds of amenities do not have the same impact on the well-being and the government can be intelligent in choosing what facilites to improve.
 
 Tools
 -----
