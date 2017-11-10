@@ -1,0 +1,11 @@
+name: bayeshack
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.6
+  - ipyleaflet
+  - bqplot
+  - scikit-learn
+  - matplotlib
+  - nb_conda_kernels
